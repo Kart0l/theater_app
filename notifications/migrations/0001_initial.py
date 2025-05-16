@@ -1,0 +1,76 @@
+"""Initial migration for notifications app."""
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+    """Initial migration class for notifications app."""
+
+    initial = True
+
+    dependencies = [
+        ("users", "0001_initial"),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name="Notification",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_index=True,
+                        verbose_name="Created",
+                    ),
+                ),
+                (
+                    "modified",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Modified"
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("email", "Email"),
+                            ("sms", "SMS"),
+                            ("push", "Push Notification"),
+                        ],
+                        max_length=10,
+                        verbose_name="Type",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=255, verbose_name="Title"),
+                ),
+                ("message", models.TextField(verbose_name="Message")),
+                (
+                    "is_read",
+                    models.BooleanField(default=False, verbose_name="Read"),
+                ),
+                (
+                    "sent_at",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="Sent at"
+                    ),
+                ),
+            ],
+            options={
+                "verbose_name": "Notification",
+                "verbose_name_plural": "Notifications",
+                "ordering": ["-created"],
+            },
+        ),
+    ]
