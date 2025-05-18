@@ -33,6 +33,9 @@ DEBUG = os.getenv("DEBUG", "0").lower() in ["1", "true", "yes"]
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
+# Append slash to URLs
+APPEND_SLASH = False
+
 
 # Application definition
 
@@ -102,6 +105,23 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
+
+# Cache settings
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://redis:6379/0"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# Cache time to live is 15 minutes
+CACHE_TTL = 60 * 15
+
+# Cache key prefix
+CACHE_KEY_PREFIX = "theater"
 
 
 # Password validation
@@ -185,12 +205,13 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
     "DEFAULT_PAGINATION_CLASS": (
         "rest_framework.pagination.PageNumberPagination"
     ),
     "PAGE_SIZE": 10,
+    "APPEND_SLASH": False,
 }
 
 # Celery settings
