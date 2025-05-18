@@ -1,10 +1,20 @@
 """Models for the shows app."""
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.timezone import datetime
 from django.utils.translation import gettext_lazy as _
 
 from core.models import TimeStampedModel
+
+
+def validate_image_size(image):
+    """Validate that image size is not too large."""
+    max_size = 5 * 1024 * 1024  # 5MB
+    if image.size > max_size:
+        raise ValidationError(
+            _("Image size cannot exceed 5MB."),
+        )
 
 
 class Genre(models.Model):
@@ -62,7 +72,10 @@ class Show(TimeStampedModel):
         related_name="shows",
     )
     actors = models.ManyToManyField(Actor, related_name="shows")
-    poster = models.ImageField(upload_to="posters/")
+    poster = models.ImageField(
+        upload_to="posters/",
+        validators=[validate_image_size],
+    )
     status = models.CharField(
         max_length=20,
         choices=Status.choices,

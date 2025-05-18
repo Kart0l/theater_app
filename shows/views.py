@@ -1,4 +1,4 @@
-"""Views for shows app."""
+"""Views for the shows app."""
 
 from django.core.cache import cache
 from django.utils.decorators import method_decorator

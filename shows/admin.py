@@ -69,12 +69,11 @@ class ShowAdmin(admin.ModelAdmin):
         "actor_count",
         "performance_count",
     )
-    list_filter = ("status", "genre", "created_at")
+    list_filter = ("status", "genre")
     search_fields = ("title", "genre__name", "actors__name")
     inlines = [PerformanceInline]
     filter_horizontal = ("actors",)
-    readonly_fields = ("created_at", "modified_at", "get_poster_preview")
-    date_hierarchy = "created_at"
+    readonly_fields = ("get_poster_preview",)
     fieldsets = (
         (None, {"fields": ("title", "genre", "status")}),
         (
@@ -85,13 +84,6 @@ class ShowAdmin(admin.ModelAdmin):
             },
         ),
         ("Cast", {"fields": ("actors",)}),
-        (
-            "Metadata",
-            {
-                "fields": ("created_at", "modified_at"),
-                "classes": ("collapse",),
-            },
-        ),
     )
 
     def get_poster_preview(self, obj):

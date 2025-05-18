@@ -70,3 +70,5 @@ coverage.xml
 *.env
 *.dev
 .DS_Store
+
+test_db.sqlite3

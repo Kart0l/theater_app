@@ -26,6 +26,8 @@ class Booking(TimeStampedModel):
         verbose_name=_("User"),
         on_delete=models.CASCADE,
         related_name="bookings",
+        null=True,
+        blank=True,
     )
     show = models.ForeignKey(
         "shows.Show",
@@ -62,4 +64,5 @@ class Booking(TimeStampedModel):
 
     def __str__(self) -> str:
         """Return string representation of Booking."""
-        return f"Booking {self.id} - {self.user.email} - {self.show.title}"
+        user_email = self.user.email if self.user else "Anonymous"
+        return f"Booking {self.id} - {user_email} - {self.show.title}"
